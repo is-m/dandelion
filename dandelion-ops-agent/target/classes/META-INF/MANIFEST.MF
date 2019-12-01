@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Implementation-Title: dandelion-ops-agent
+Implementation-Version: 1.0.0
+Class-Path: libs/log4j-api-2.12.1.jar libs/log4j-core-2.12.1.jar libs/
+ log4j-slf4j-impl-2.12.1.jar libs/slf4j-api-1.7.28.jar
+Build-Jdk-Spec: 1.8
+Created-By: Maven Integration for Eclipse
+Main-Class: com.m.paas.dandelion.ops.agent.AgentApplication
+

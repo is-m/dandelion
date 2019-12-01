@@ -1,0 +1,3 @@
+2019-11-02 13:00:01.535 INFO [main] com.m.paas.dandelion.ops.agent.AgentApplication.main - agent starting
+2019-11-02 13:00:01.538 INFO [main] com.m.paas.dandelion.ops.agent.AgentApplication.main - agent start success
+2019-11-02 13:00:01.538 INFO [main] com.m.paas.dandelion.ops.agent.AgentApplication.main - masters:127.0.0.1:7001

@@ -1,0 +1,32 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.m.paas.dandelion</groupId>
+		<artifactId>dandelion</artifactId>
+		<version>1.0.0</version>
+	</parent>
+	<artifactId>dandelion-admin-server</artifactId>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.ruoyi</groupId>
+			<artifactId>ruoyi-admin</artifactId>
+			<version>4.1.0</version>
+		</dependency>
+
+		<!-- spring-boot-devtools -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<optional>true</optional> <!-- 表示依赖不会传递 -->
+		</dependency>
+
+		<dependency>
+			<groupId>com.m.paas.dandelion</groupId>
+			<artifactId>dandelion-admin-ops</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+	</dependencies>
+</project>

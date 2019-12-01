@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>统计</title>
+<link rel="shortcut icon" href="favicon.ico">
+<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" />
+<link th:href="@{/css/font-awesome.min.css}" rel="stylesheet" />
+<link th:href="@{/css/main/animate.min.css}" rel="stylesheet" />
+<link th:href="@{/css/main/style.min862f.css}" rel="stylesheet" />
+<link th:href="@{/css/fullscreen.min.css}" rel="stylesheet" />
+<link th:href="@{/css/xterm.min.css}" rel="stylesheet" />
+</head>
+
+<body class="gray-bg">
+
+	<div id="terminal"></div>
+	<p style="color:red;">注意：目前发现打开中文输入法时，会存在数字按键（非小键盘）区域输入失灵</p>
+	<div class="wrapper wrapper-content">
+		<div class="col-sm-7">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>服务器登录</h5>
+				</div>
+				<div class="ibox-content">
+					<div class="row">
+						<div class="col-sm-6 b-r">
+							<form role="form" id="formTerminalLogin">
+								<div class="form-group">
+									<label>主机</label> <input type="text" placeholder="请输入您要登录的主机"
+										class="form-control" name="host">
+								</div>
+								<div class="form-group">
+									<label>用户名</label> <input type="text" placeholder="请输入用户名"
+										class="form-control" name="username">
+								</div>
+								<div class="form-group">
+									<label>密码</label> <input type="password" placeholder="请输入密码"
+										class="form-control" name="password">
+								</div>
+								<div>
+									<button id="btnLoginTerminal"
+										class="btn btn-sm btn-primary pull-right m-t-n-xs"
+										type="button">
+										<strong>登 录</strong>
+									</button>
+									<label> <input type="checkbox">自动登录
+									</label>
+								</div>
+							</form>
+						</div>
+						<div class="col-sm-6">
+							<h4>还不是会员？</h4>
+							<p>您可以注册一个新账户</p>
+							<p class="text-center">
+								<a href="form_basic.html"><i class="fa fa-sign-in big-icon"></i></a>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<script th:src="@{/js/jquery.min.js}"></script>
+	<script th:src="@{/js/bootstrap.min.js}"></script>
+	<script th:src="@{/js/xterm.min.js}"></script>
+	<!-- 	<script th:src="@{/js/fullscreen.min.js}"></script> -->
+	<script type="text/javascript">
+		var action = function(type,data){
+			return JSON.stringify({ type, ...data });
+		}
+		
+		$.fn.jsonData = function(data){
+		  var o = {};
+		  var a = this.serializeArray();
+		  $.each(a, function() {
+		    if (o[this.name]) {
+		      if (!o[this.name].push) {
+		        o[this.name] = [o[this.name]];
+		      }
+		      o[this.name].push(this.value || '');
+		    } else {
+		      o[this.name] = this.value || '';
+		    }
+		  });
+		  return o;
+		};
+		
+		var cmdString = [];
+		var handleMassage = function(msg){
+			console.log('handleMessage',msg);
+			var result = JSON.parse(msg);
+			if(result.status != 1){
+				alert('交互失败：'+result.data);
+				return;
+			}
+			
+			if(result.type == "terminalSSHLogin"){
+				//debugger
+				term = new Terminal({
+					cursorBlink : true
+				});
+				term.open(document.getElementById('terminal'));
+				// term.write('Hello from \x1B[1;3;31mxterm.js\x1B[0m $ ');
+				// https://blog.csdn.net/qq_31126175/article/details/84346305  
+				/* term.on('key', function(key, e) {
+					console.log(e);
+					switch(e.key){
+					case "F5": // 刷新
+						ws.close();
+						window.location.reload();
+						break;
+					case "Backspace": // 回退
+					
+					break;
+					case "Tab": // 制表位?按命令场景自定义提示
+						term.write(' ');
+						cmdString.push(' ');
+						break;
+					case "Enter":
+						
+						default:
+							term.write(key);
+							cmdString.push(key);
+							break;
+					}
+					// F5 刷新
+					if(e.key == "F5"){
+					
+					}else if(){
+						
+					}
+				    
+				     //term.writeln(key)//输入并换行
+				 })   */
+				 
+				 term.on('data', command => {
+				    console.log(command);
+				    ws.send(
+				      action('TERMINAL_COMMAND', {
+				        command,
+				      })
+				    );
+				  });
+				
+			}
+			term && term.write(result.data)
+		}
+		
+		var term = null;
+		var ws = new WebSocket('ws://' + location.host + '/server/ops/socket');
+		ws.onopen = function(e) {
+			console.log('socket connected', e);
+		}
+
+		ws.onmessage = function(e) {
+			console.log('socket message', e); 
+			handleMassage(e.data);
+		}
+
+		ws.onerror = function(e) {
+			console.log('socket error', e);
+		};
+
+		ws.onclose = function(e) {
+			console.log('socket closed', e);
+			term.destroy();
+		};
+
+		$("#btnLoginTerminal").click(function() {
+			var formData = $("#formTerminalLogin").jsonData();
+			ws.send(action("terminalSSHLogin",formData)); 
+		});
+	</script>
+</body>
+</html>
