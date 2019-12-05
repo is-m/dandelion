@@ -21,7 +21,9 @@
 ## 项目技术
 
 xterm - 前端web terminal组件
+
 JSCH  - linux ssh 连接和命令执行组件
+
 [ruoyi][ruoyiurl] - 基于springboot的开源后台管理框架 （后续会采用[wecode][wecodeurl]重写前端）
 
 [ruoyiurl]: http://ruoyi.vip/ "ruoyi"
