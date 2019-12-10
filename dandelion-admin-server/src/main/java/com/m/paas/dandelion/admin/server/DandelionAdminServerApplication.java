@@ -3,7 +3,7 @@ package com.m.paas.dandelion.admin.server;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication(scanBasePackages = { "com.ruoyi", "com.m.paas.dandelion.admin" })
+@SpringBootApplication(scanBasePackages = { "com.ruoyi", "com.m.paas.dandelion" })
 public class DandelionAdminServerApplication {
 
 	public static void main(String[] args) {
